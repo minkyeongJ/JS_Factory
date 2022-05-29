@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/2d74121aef.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <article id="app">
+        <ul class="options">
+            <li>
+                <button type="button" data-command="h1">H1</button>
+            </li>
+            <li>
+                <button type="button" data-command="h2">H2</button>
+            </li>
+            <li>
+                <button type="button" data-command="h3">H3</button>
+            </li>
+            <li>
+                <button type="button" data-command="p">P</button>
+            </li>
+            <li>
+                <button type="button" data-command="strong">
+                    <i class="fa-solid fa-bold"></i>
+                </button>
+            </li>
+            <li>
+                <button type="button" data-command="em">
+                    <i class="fa-solid fa-italic"></i>
+                </button>
+            </li>
+            <li>
+                <button type="button" data-command="u">
+                    <i class="fa-solid fa-underline"></i>
+                </button>
+            </li>
+            <li>
+                <button type="button" data-command="del">
+                    <i class="fa-solid fa-strikethrough"></i>
+                </button>
+            </li>
+            <li>
+                <button type="button" data-command="style_left">
+                    <i class="fa-solid fa-align-left"></i>
+                </button>
+            </li>
+            <li>
+                <button type="button" data-command="style_center">
+                    <i class="fa-solid fa-align-center"></i>
+                </button>
+            </li>
+            <li>
+                <button type="button" data-command="style_right">
+                    <i class="fa-solid fa-align-right"></i>
+                </button>
+            </li>
+            <li>
+                <button type="button" data-command="style_justify">
+                    <i class="fa-solid fa-align-justify"></i>
+                </button>
+            </li>
+        </ul>
+        <div class="editor" contenteditable="true">
+            <h1>나만의 Wysiwyg 에디터</h1>
+            <p>hello world</p>
+        </div>
+    </article>
+    <script>
+        const editor = document.querySelector('.editor');
+
+        document.querySelectorAll('.options button').forEach(item => item.addEventListener('click', function () {
+            const command = item.dataset.command;
+            const selectedTxt = window.getSelection();
+            //css style로 바꾸는 경우
+            if (command.includes('style')){
+                // const selectedTxt = window.getSelection();
+                // parentEl는 항상 다르기 때문에 할 때마다 선언한다.
+                const parentEl = selectedTxt.anchorNode.parentElement;
+                parentEl.style.textAlign = command.slice(6);
+                //html 요소를 바꾸는 경우
+            }else{
+                const createdEl = document.createElement(command);
+
+                const selectedTxt = window.getSelection();
+
+                //선택한 부분의 전체 영역에 적용
+                if (command === 'h1' || command === 'h2' || command === 'h3' || command === 'p') {
+                    const parentEl = selectedTxt.anchorNode.parentElement;
+
+                    createdEl.textContent = parentEl.textContent;
+
+                    //editor의 자식인 parentEl를 createdEl로 바꾸겠다
+                    editor.replaceChild(createdEl, parentEl);
+                }else{
+                    //일부분 선택했을 때
+                    const selectedTxtRange = selectedTxt.getRangeAt(0);
+                    selectedTxtRange.surroundContents(createdEl);
+                }
+            }
+        }));
+    </script>
+</body>
+</html>

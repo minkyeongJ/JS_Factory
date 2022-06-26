@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas</title>
+    <style>
+      canvas { 
+        border : 1px solid black;
+      }
+    </style>
+</head>
+<body>
+    <canvas width="500" height="500"></canvas>
+
+    <script>
+      //세팅
+      const canvas = document.querySelector("body > canvas");
+      const ctx = canvas.getContext('2d');
+
+      let xPos = 0;
+
+      function play(){
+        ctx.clearRect(0, 0, 500, 500);//지우개
+        ctx.fillRect(xPos, 0, 30, 30);
+        xPos += 2;
+        if (xPos > 500 ) {
+          xPos = 0;
+        }
+        window.requestAnimationFrame(play);//재귀처리
+      }
+
+      window.requestAnimationFrame(play);
+
+    </script>
+</body>
+</html>

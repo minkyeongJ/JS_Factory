@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas</title>
+    <style>
+      canvas { 
+        border : 1px solid black;
+      }
+    </style>
+</head>
+<body>
+    <canvas width="500" height="500"></canvas>
+
+    <script>
+      //세팅
+      const canvas = document.querySelector("body > canvas");
+      const ctx = canvas.getContext('2d');
+
+      class Ball {
+        constructor() {
+          this.xPos = 200;
+          this.yPos = 200;
+          this.xSpeed = 3;
+          this.ySpeed = 1;
+        }
+
+        //공 생성
+        drawBall() {
+          ctx.lineWidth = 30;
+          ctx.beginPath();
+          ctx.arc(this.xPos, this.yPos, 30, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        //공 움직이기
+        moveMyBall() {
+          this.xPos += this.xSpeed;
+          this.yPos += this.ySpeed;
+        }
+
+        //벽에 부딫힐 때
+        callisionBall() {
+          if(this.xPos < 30 || this.xPos > 470) {
+            this.xSpeed = -this.xSpeed;
+          }
+          if(this.yPos < 30 || this.yPos > 470) {
+            this.ySpeed = -this.ySpeed;
+          }
+        }
+      }
+
+      const theBall = new Ball();
+      
+      function play(){
+        ctx.clearRect(0, 0, 500, 500);//지우개
+        theBall.drawBall();
+        theBall.moveMyBall();
+        theBall.callisionBall();
+        window.requestAnimationFrame(play);//재귀처리
+      }
+
+      window.requestAnimationFrame(play);
+
+    </script>
+</body>
+</html>
